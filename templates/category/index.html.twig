@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Categories{% endblock %}
+
+{% block body %}
+    <div class="example-wrapper">
+        <h1>List of all categories</h1>
+
+        {% for message in app.flashes('success') %}
+            <div class="alert alert-success" role="alert">
+                {{ message }}
+            </div>
+        {% endfor %}
+
+        <table class="table table-striped">
+            <thead>
+            <td>Id</td>
+            <td>Title</td>
+            <td>Actions</td>
+            </thead>
+            <tbody>
+            {% for category in categories %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td><a href="{{ path('category.show', {id: category.id}) }}">{{ category.title }}</a></td>
+                    <td>
+                        <a href="{{ path('category.delete', {id: category.id}) }}" style="color: red">Delete</a>
+                        <a href="{{ path('category.edit', {id: category.id}) }}" style="color: green">Edit</a>
+                        <a href="{{ path('category.show', {id: category.id}) }}" style="color: blue">Show</a>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}
