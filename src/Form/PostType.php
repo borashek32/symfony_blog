@@ -6,6 +6,7 @@ use App\Entity\Category;
 use App\Entity\Post;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -17,11 +18,12 @@ class PostType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('img', TextType::class, [
+            ->add('image', FileType::class, [
                 'label' => 'Image',
                 'attr'  => [
-                    'placeholder' => 'Enter link to image',
-                    'class'       => 'form-control mb-3'
+                    'placeholder' => 'Upload image',
+                    'class'       => 'form-control mb-3',
+                    'mapped'      => false,
                 ]
             ])
             ->add('category', EntityType::class, [
@@ -41,7 +43,7 @@ class PostType extends AbstractType
                     'class'       => 'form-control mb-3'
                 ]
             ])
-            ->add('text', TextareaType::class, [
+            ->add('content', TextareaType::class, [
                 'label' => 'Text',
                 'attr'  => [
                     'placeholder' => 'Enter some text',

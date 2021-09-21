@@ -4,7 +4,9 @@ namespace App\Controller;
 
 use App\Entity\Post;
 use App\Form\PostType;
+use App\Repository\CategoryRepositoryInterface;
 use App\Repository\PostRepository;
+use App\Repository\PostRepositoryInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,6 +17,14 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class PostController extends AbstractController
 {
+    private $postRepository;
+
+    public function __construct(CategoryRepositoryInterface $categoryRepository,
+                                PostRepositoryInterface $postRepository)
+    {
+        $this->categoryRepository = $postRepository;
+        $this->postRepository = $postRepository;
+    }
     /**
      * @Route("/", name="index")
      * @param PostRepository $postRepository
@@ -22,7 +32,7 @@ class PostController extends AbstractController
      */
     public function index(PostRepository $postRepository): Response
     {
-        $posts = $postRepository->findAll();
+        $posts = $postRepository->getAllPosts();
 
         return $this->render('post/index.html.twig', compact('posts'));
     }
@@ -32,17 +42,13 @@ class PostController extends AbstractController
      */
     public function create(Request $request)
     {
-        // create a new post with a title
         $post = new Post;
         $form = $this->createForm(PostType::class, $post);
         $form->handleRequest($request);
 
         if ($form->isSubmitted()) {
-            // entity manager
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($post);
-            $em->flush();
-
+            $file = $form->get('image')->getData();
+            $this->postRepository->setCreatePost($post, $file);
             $this->addFlash('success', 'Your post was created');
 
             return $this->redirect($this->generateUrl('post.index'));

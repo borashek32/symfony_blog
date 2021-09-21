@@ -9,8 +9,8 @@
     </style>
 
     <div class="example-wrapper">
-        <img src="{{ post.img }}" alt="{{ post.title }}" width="200px">
+        <img src="{{ asset('/uploads/post/') }}{{ post.image }}" alt="{{ post.title }}" width="200px">
         <h1>{{ post.title }}</h1>
-        <p>{{ post.text }}</p>
+        <p>{{ post.content }}</p>
     </div>
 {% endblock %}

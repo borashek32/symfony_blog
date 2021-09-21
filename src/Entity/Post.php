@@ -2,43 +2,59 @@
 
 namespace App\Entity;
 
-use App\Repository\PostRepository;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * @ORM\Entity(repositoryClass=PostRepository::class)
- * @ORM\Table(name="post")
+ * @ORM\Entity(repositoryClass="App\Repository\PostRepository")
  */
 class Post
 {
+    public const PUBLISHED = 1;
+    public const DRAFT = 0;
+
+
     /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
+     * @ORM\Id()
+     * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      */
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255)
-     * @Assert\NotBlank()
+     * @ORM\Column(type="string", length=1000)
      */
     private $title;
 
     /**
      * @ORM\Column(type="text")
      */
-    private $text;
+    private $content;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\Column(type="string", length=500, nullable=true)
      */
-    private $img;
+    private $image;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Category", inversedBy="posts")
+     * @ORM\Column(type="datetime")
+     */
+    private $create_at;
+
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $update_at;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $is_published;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Category::class, inversedBy="posts")
      */
     private $category;
+
 
     public function getId(): ?int
     {
@@ -57,33 +73,82 @@ class Post
         return $this;
     }
 
-    public function getText(): ?string
+    public function getContent(): ?string
     {
-        return $this->text;
+        return $this->content;
     }
 
-    public function setText(string $text): self
+    public function setContent(string $content): self
     {
-        $this->text = $text;
+        $this->content = $content;
 
         return $this;
     }
 
-    public function getImg(): ?string
+    public function getImage(): ?string
     {
-        return $this->img;
+        return $this->image;
     }
 
-    public function setImg(?string $img): self
+    public function setImage(?string $image): self
     {
-        $this->img = $img;
+        $this->image = $image;
 
         return $this;
     }
 
-    public function getCategory(): ?int
+    public function getCreateAt(): ?\DateTimeInterface
     {
-        return $this->id;
+        return $this->create_at;
+    }
+
+    public function setCreateAtValue()
+    {
+        $this->create_at = new \DateTime();
+    }
+
+    public function setCreateAt(\DateTimeInterface $create_at): self
+    {
+        $this->create_at = $create_at;
+
+        return $this;
+    }
+
+    public function getUpdateAt(): ?\DateTimeInterface
+    {
+        return $this->update_at;
+    }
+
+    public function setUpdateAtValue()
+    {
+        $this->update_at = new \DateTime();
+    }
+
+    public function setUpdateAt(\DateTimeInterface $update_at): self
+    {
+        $this->update_at = $update_at;
+
+        return $this;
+    }
+
+    public function getIsPublished(): ?bool
+    {
+        return $this->is_published;
+    }
+
+    public function setIsPublished()
+    {
+        $this->is_published = self::PUBLISHED;
+    }
+
+    public function setIsDraft()
+    {
+        $this->is_published = self::DRAFT;
+    }
+
+    public function getCategory(): ?Category
+    {
+        return $this->category;
     }
 
     public function setCategory(?Category $category): self

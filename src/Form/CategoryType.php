@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\Category;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -15,6 +16,14 @@ class CategoryType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
+            ->add('image', FileType::class, [
+                'label' => 'Image',
+                'attr'  => [
+                    'placeholder' => 'Upload image',
+                    'class'       => 'form-control mb-3',
+                    'mapped'      => false,
+                ]
+            ])
             ->add('title', TextType::class, [
                 'label' => 'Name',
                 'attr'  => [
