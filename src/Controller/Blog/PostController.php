@@ -1,80 +1,73 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\Blog;
 
 use App\Entity\Post;
 use App\Form\PostType;
+use App\Repository\CategoryRepository;
 use App\Repository\CategoryRepositoryInterface;
-use App\Repository\PostRepository;
 use App\Repository\PostRepositoryInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route("/post", name="post.")
- */
+
 class PostController extends AbstractController
 {
     private $postRepository;
+    private $categoryRepository;
 
     public function __construct(CategoryRepositoryInterface $categoryRepository,
                                 PostRepositoryInterface $postRepository)
     {
-        $this->categoryRepository = $postRepository;
+        $this->categoryRepository = $categoryRepository;
         $this->postRepository = $postRepository;
     }
-    /**
-     * @Route("/", name="index")
-     * @param PostRepository $postRepository
-     * @return Response
-     */
-    public function index(PostRepository $postRepository): Response
+
+    public function posts()
     {
-        $posts = $postRepository->getAllPosts();
+        $posts = $this->postRepository->findAll();
 
         return $this->render('post/index.html.twig', compact('posts'));
     }
 
     /**
-     * @Route("/create", name="create")
+     * @param Request $request
+     * @param CategoryRepository $categoryRepository
+     * @return RedirectResponse|Response
      */
-    public function create(Request $request)
+    public function create(Request $request, CategoryRepository $categoryRepository)
     {
-        $post = new Post;
-        $form = $this->createForm(PostType::class, $post);
-        $form->handleRequest($request);
+        $categories = $categoryRepository->getAllCategory();
 
-        if ($form->isSubmitted()) {
-            $file = $form->get('image')->getData();
-            $this->postRepository->setCreatePost($post, $file);
-            $this->addFlash('success', 'Your post was created');
+        if ($categories) {
+            $post = new Post;
+            $form = $this->createForm(PostType::class, $post);
+            $form->handleRequest($request);
 
-            return $this->redirect($this->generateUrl('post.index'));
+            if ($form->isSubmitted()) {
+                $file = $form->get('image')->getData();
+                $this->postRepository->setCreatePost($post, $file);
+                $this->addFlash('success', 'Your post was created');
+
+                return $this->redirect($this->generateUrl('posts'));
+            }
+
+            // return a response
+            return $this->render('post/create.html.twig', [
+                'form' => $form->createView()
+            ]);
+        } else {
+            return $this->render('post/no-category.html.twig');
         }
-
-        // return a response
-        return $this->render('post/create.html.twig', [
-            'form' => $form->createView()
-        ]);
     }
 
-    /**
-     * @Route("/show/{id}", name="show")
-     * @param Post $post
-     * @return Response
-     */
     public function show(Post $post)
     {
         return $this->render('post/post.html.twig', compact('post'));
     }
 
-    /**
-     * @Route("/delete/{id}", name="delete")
-     * @param Post $post
-     * @return Response
-     */
     public function remove(Post $post)
     {
         $em = $this->getDoctrine()->getManager();
@@ -86,10 +79,6 @@ class PostController extends AbstractController
         return $this->redirect($this->generateUrl('post.index'));
     }
 
-    /**
-     * @Route("/edit/{id}", name="edit")
-     * @param Post $post
-     */
     public function update(Request $request, $id)
     {
         $post = $this->getDoctrine()->getRepository(Post::class)->find($id);

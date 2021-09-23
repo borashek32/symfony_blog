@@ -12,43 +12,34 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 class FileManagerService implements FileManagerServiceInterface
 {
 
-    private $postImageDirectory;
+    private $imageDirectory;
 
-    public function __construct($postImageDirectory)
+    public function __construct($imageDirectory)
     {
-        $this->postImageDirectory = $postImageDirectory;
+        $this->imageDirectory = $imageDirectory;
     }
 
     /**
      * @return mixed
      */
-    public function getPostImageDirectory()
+    public function getImageDirectory()
     {
-        return $this->postImageDirectory;
+        return $this->imageDirectory;
     }
 
-    public function imagePostUpload(UploadedFile $file): string
+    public function imageUpload(UploadedFile $file): string
     {
         $fileName = uniqid().'.'.$file->guessExtension();
-
-        try {
-            $file->move($this->getPostImageDirectory(), $fileName);
-        } catch (FileException $exception){
-            return $exception;
-        }
+        $file->move($this->getImageDirectory(), $fileName);
 
         return $fileName;
     }
 
-    public function removePostImage(string $fileName)
+    public function removeImage(string $fileName)
     {
         $fileSystem = new Filesystem();
-        $fileImage = $this->getPostImageDirectory().''.$fileName;
-        try {
-            $fileSystem->remove($fileImage);
-        } catch (IOExceptionInterface $exception){
-            echo $exception->getMessage();
-        }
+        $fileImage = $this->getImageDirectory().''.$fileName;
+        $fileSystem->remove($fileImage);
     }
 
 }

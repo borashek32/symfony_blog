@@ -1,4 +1,4 @@
-{% extends 'base.html.twig' %}
+{% extends 'layouts/base.html.twig' %}
 
 {% block title %}Post{% endblock %}
 
@@ -9,7 +9,7 @@
     </style>
 
     <div class="example-wrapper">
-        <img src="{{ asset('/uploads/post/') }}{{ post.image }}" alt="{{ post.title }}" width="200px">
+        <img src="{{ asset('/uploads/') }}{{ post.image }}" alt="{{ post.title }}" width="200px">
         <h1>{{ post.title }}</h1>
         <p>{{ post.content }}</p>
     </div>

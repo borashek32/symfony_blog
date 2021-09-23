@@ -1,3 +1,28 @@
-#index:
-#    path: /
-#    controller: App\Controller\DefaultController::index
+main:
+    path: /
+    controller: App\Controller\MainController::custom
+
+posts:
+    path: /posts
+    defaults: { _controller: App\Controller\Blog\PostController::posts }
+    methods: GET
+
+posts_show:
+    path: /posts/show/{id}
+    defaults: { _controller: App\Controller\Blog\PostController::show }
+    methods: GET
+
+# посмотреть crud-роуты, они не работают(
+posts_create:
+    path: /posts/create
+    defaults: { _controller: App\Controller\Blog\PostController::create }
+
+posts_update:
+    path: /posts/update/{id}
+    defaults: { _controller: App\Controller\Blog\PostController::update }
+    methods: POST
+
+posts_delete:
+    path: /posts/delete/{id}
+    defaults: { _controller: App\Controller\Blog\PostController::remove }
+    methods: POST

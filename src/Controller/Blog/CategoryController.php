@@ -1,9 +1,8 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\Blog;
 
 use App\Entity\Category;
-use App\Entity\Post;
 use App\Form\CategoryType;
 use App\Repository\CategoryRepository;
 use App\Repository\CategoryRepositoryInterface;
@@ -13,7 +12,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Route("/category", name="category.")
+ * @Route("/categories", name="category.")
  */
 class CategoryController extends AbstractController
 {
@@ -24,7 +23,7 @@ class CategoryController extends AbstractController
         $this->categoryRepository = $categoryRepository;
     }
     /**
-     * @Route("/category", name="index")
+     * @Route("/", name="index", methods={"GET"})
      * @param CategoryRepository $categoryRepository
      * @return Response
      */
@@ -33,6 +32,16 @@ class CategoryController extends AbstractController
         $categories = $this->categoryRepository->getAllCategory();
 
         return $this->render('category/index.html.twig', compact('categories'));
+    }
+
+    /**
+     * @Route("/show/{id}", name="show", methods={"GET"})
+     * @param Category $category
+     * @return Response
+     */
+    public function show(Category $category)
+    {
+        return $this->render('category/category.html.twig', compact('category'));
     }
 
     /**
@@ -58,17 +67,7 @@ class CategoryController extends AbstractController
     }
 
     /**
-     * @Route("/show/{id}", name="show")
-     * @param Category $category
-     * @return Response
-     */
-    public function show(Category $category)
-    {
-        return $this->render('category/category.html.twig', compact('category'));
-    }
-
-    /**
-     * @Route("/delete/{id}", name="delete")
+     * @Route("/delete/{id}", name="delete", methods={"POST"})
      * @param Category $category
      * @return Response
      */
@@ -84,7 +83,7 @@ class CategoryController extends AbstractController
     }
 
     /**
-     * @Route("/edit/{id}", name="edit")
+     * @Route("/update/{id}", name="edit", methods={"POST"})
      * @param Category $category
      */
     public function update(Request $request, $id)

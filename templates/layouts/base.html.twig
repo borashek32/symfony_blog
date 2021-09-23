@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
+        <title>{% block title %}{% endblock %}</title>
         {# Run `composer require symfony/webpack-encore-bundle`
            and uncomment the following Encore helpers to start using Symfony UX #}
         {% block stylesheets %}
@@ -21,7 +21,7 @@
     <body>
         <ul class="nav justify-content-center">
             <li class="nav-item">
-                <a class="nav-link" aria-current="page" href="{{ path('custom', {name: 'nat'}) }}">Greet nat!</a>
+                <a class="nav-link" aria-current="page" href="{{ path('main') }}">Greet nat!</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="{{ path('category.index') }}">Categories</a>
@@ -30,10 +30,10 @@
                 <a class="nav-link" href="{{ path('category.create') }}">Create category</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="{{ path('post.index') }}">All posts</a>
+                <a class="nav-link" href="{{ path('posts') }}">All posts</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="{{ path('post.create') }}">Create post</a>
+                <a class="nav-link" href="{{ path('posts_create') }}">Create post</a>
             </li>
         </ul>
 

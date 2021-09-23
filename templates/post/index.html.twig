@@ -1,4 +1,4 @@
-{% extends 'base.html.twig' %}
+{% extends 'layouts/base.html.twig' %}
 
 {% block title %}Posts{% endblock %}
 
@@ -24,15 +24,15 @@
             <tr>
                 <td>{{ loop.index }}</td>
                 <td>
-                    <a href="{{ path('post.show', {id: post.id}) }}">{{ post.title }}</a>
+                    <a href="{{ path('posts_show', {id: post.id}) }}">{{ post.title }}</a>
                 </td>
                 <td>
 
                 </td>
                 <td>
-                    <a href="{{ path('post.delete', {id: post.id}) }}" style="color: red">Delete</a>
-                    <a href="{{ path('post.edit', {id: post.id}) }}" style="color: green">Edit</a>
-                    <a href="{{ path('post.show', {id: post.id}) }}" style="color: blue">Show</a>
+                    <a href="{{ path('posts_delete', {id: post.id}) }}" style="color: red">Delete</a>
+                    <a href="{{ path('posts_update', {id: post.id}) }}" style="color: green">Edit</a>
+                    <a href="{{ path('posts_show', {id: post.id}) }}" style="color: blue">Show</a>
                 </td>
             </tr>
             {% endfor %}

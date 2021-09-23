@@ -12,11 +12,11 @@ interface FileManagerServiceInterface
      * @param UploadedFile $file
      * @return string
      */
-    public function imagePostUpload(UploadedFile $file): string;
+    public function imageUpload(UploadedFile $file): string;
 
     /**
      * @param string $fileName
      * @return mixed
      */
-    public function removePostImage(string $fileName);
+    public function removeImage(string $fileName);
 }

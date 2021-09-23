@@ -1,6 +1,6 @@
-{% extends 'base.html.twig' %}
+{% extends 'layouts/base.html.twig' %}
 
-{% block title %}Hello MainController!{% endblock %}
+{% block title %}Hello!{% endblock %}
 
 {% block body %}
     <style>
@@ -9,12 +9,46 @@
     </style>
 
     <div class="example-wrapper">
-        <h1>Hello {{ name }}!</h1>
-
-        This friendly message is coming from:
-        <ul>
-            <li>Your controller at <code><a href="{{ '/Applications/MAMP/htdocs/another_one/src/Controller/MainController.php'|file_link(0) }}">src/Controller/MainController.php</a></code></li>
-            <li>Your template at <code><a href="{{ '/Applications/MAMP/htdocs/another_one/templates/main/index.html.twig'|file_link(0) }}">templates/main/index.html.twig</a></code></li>
-        </ul>
+        <h1 class="text-center">Hello, Nataly!</h1>
+        <br>
+        <h3>Categories in blog:</h3>
+        <table>
+            <tbody>
+                {% for category in categories %}
+                    <tr>
+                        <td style="padding-right: 8px">{{ loop.index }}</td>
+                        <td style="padding-right: 8px">
+                            <a href="{{ path('category.show', {id: category.id}) }}">
+                                <img src="{{ asset('/uploads/') }}{{ category.image }}"
+                                     alt="{{ category.title }}" width="50px">
+                            </a>
+                        </td>
+                        <td style="padding-right: 8px">
+                            <a href="{{ path('category.show', {id: category.id}) }}">{{ category.title }}</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <br>
+        <br>
+        <h3>Read the latest posts in my blog:</h3>
+        <div class="row">
+            {% for post in posts|sort|reverse %}
+                <div class="card" style="width: 18rem; margin: 10px; padding: 10px">
+                    <div class="card-img-top" style="display: flex; justify-content: center">
+                        <img src="{{ asset('/uploads/') }}{{ post.image }}"
+                             alt="{{ post.title }}" width="150px">
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <a href="{{ path('posts_show', {id: post.id}) }}">{{ post.title }}</a>
+                        </h5>
+                        <p class="card-text">{{ post.content|slice(0, 60) }}...</p>
+                        <a href="{{ path('posts_show', {id: post.id}) }}">Details...</a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
     </div>
 {% endblock %}

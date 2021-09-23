@@ -1,4 +1,4 @@
-{% extends 'base.html.twig' %}
+{% extends 'layouts/base.html.twig' %}
 
 {% block title %}Category{% endblock %}
 
@@ -9,7 +9,7 @@
     </style>
 
     <div class="example-wrapper">
-        <img src="{{ asset('/uploads/post/') }}{{ category.image }}" alt="{{ category.title }}" width="200px">
+        <img src="{{ asset('/uploads/') }}{{ category.image }}" alt="{{ category.title }}" width="200px">
         <h1>{{ category.title }}</h1>
         <p>{{ category.description }}</p>
 {#        <a href="{{ path('category.show_posts_by_category', {category_id: category.id}) }}">Show posts in the category</a>#}

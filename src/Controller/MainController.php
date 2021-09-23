@@ -2,29 +2,28 @@
 
 namespace App\Controller;
 
+use App\Repository\CategoryRepository;
+use App\Repository\CategoryRepositoryInterface;
+use App\Repository\PostRepository;
+use App\Repository\PostRepositoryInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
 
 class MainController extends AbstractController
 {
-    /**
-     * @Route("/", name="main")
-     */
-    public function index(): Response
+    public function __construct(CategoryRepositoryInterface $categoryRepository,
+                                PostRepositoryInterface $postRepository)
     {
-        return $this->render('main/index.html.twig');
+        $this->categoryRepository = $categoryRepository;
+        $this->postRepository = $postRepository;
     }
 
-    /**
-     * @param Request $request
-     * @Route("/custom/{name?}", name="custom")
-     * @return Response
-     */
-    public function custom(Request $request): Response
+    public function custom(PostRepository $postRepository,
+                           CategoryRepository $categoryRepository)
     {
-        $name = $request->get('name');
-        return $this->render('main/custom.html.twig', compact('name'));
+        $posts = $postRepository->findAll(['create_at'], ['sort' => 'desc'], 4);
+        $categories = $categoryRepository->findAll();
+
+        return $this->render('main/custom.html.twig',
+            compact('posts', 'categories'));
     }
 }
